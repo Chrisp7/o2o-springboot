@@ -140,7 +140,7 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter implements Applica
 		permissionIR.excludePathPatterns("/shopadmin/shopmanagement");
 		permissionIR.excludePathPatterns("/shopadmin/getshopmanagementinfo");
 		/** shopauthmanagement page **/
-		loginIR.excludePathPatterns("/shopadmin/addshopauthmap");
+		permissionIR.excludePathPatterns("/shopadmin/addshopauthmap");
 	}
 
 }

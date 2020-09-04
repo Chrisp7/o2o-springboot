@@ -226,6 +226,7 @@ public class ShopAuthManagementController {
 	 */
 	@RequestMapping(value = "/addshopauthmap", method = RequestMethod.GET)
 	private String addShopAuthMap(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("enter into addshopauthmap!!");
 		// 从request里面获取微信用户的信息
 		WechatAuth auth = getEmployeeInfo(request);
 		System.out.println("auth info get from getEmployeeInfo -----> " + auth.toString());
@@ -320,8 +321,10 @@ public class ShopAuthManagementController {
 	 * @return
 	 */
 	private WechatAuth getEmployeeInfo(HttpServletRequest request) {
+		System.out.println("enter into getEmployeeInfo method!!");
 		String code = request.getParameter("code");
 		WechatAuth auth = null;
+		System.out.println("{getEmployeeInfo}----->code: " + code);
 		if (null != code) {
 			UserAccessToken token;
 			try {
