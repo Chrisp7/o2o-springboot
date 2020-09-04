@@ -98,7 +98,7 @@ public class DESUtil {
 		System.out.println(getEncryptString("CP"));
 		System.out.println(getEncryptString("Cp940512!?"));
 		System.out.println(getDecryptString("+sx4SInA0II="));
-		System.out.println(getDecryptString("YPlsMXhTYWUSDMQa/vpQhw=="));
+		System.out.println(getDecryptString("sy55lye5522yey665ls25s6952s5e59e"));
 	}
 
 }

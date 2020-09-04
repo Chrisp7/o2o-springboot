@@ -1,17 +1,20 @@
 package com.imooc.o2o.service.impl;
 
-import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.imooc.o2o.dao.ShopAuthMapDao;
 import com.imooc.o2o.dao.ShopDao;
 import com.imooc.o2o.dto.ImageHolder;
 import com.imooc.o2o.dto.ShopExecution;
 import com.imooc.o2o.entity.Shop;
+import com.imooc.o2o.entity.ShopAuthMap;
 import com.imooc.o2o.enums.ShopStateEnum;
 import com.imooc.o2o.exceptions.ShopOperationException;
 import com.imooc.o2o.service.ShopService;
@@ -23,6 +26,9 @@ import com.imooc.o2o.util.PathUtil;
 public class ShopServiceImpl implements ShopService {
 	@Autowired
 	private ShopDao shopDao;
+	@Autowired
+	private ShopAuthMapDao shopAuthMapDao;
+	private final static Logger LOG = LoggerFactory.getLogger(ShopServiceImpl.class);
 
 	@Override
 	public ShopExecution getShopList(Shop shopCondition, int pageIndex, int pageSize) {
@@ -66,12 +72,30 @@ public class ShopServiceImpl implements ShopService {
 					if (affectNum < 1) {
 						throw new ShopOperationException("更新图片地址失败");
 					}
+					// 执行增加shopAuthMap操作
+					ShopAuthMap shopAuthMap = new ShopAuthMap();
+					shopAuthMap.setEmployee(shop.getOwner());
+					shopAuthMap.setShop(shop);
+					shopAuthMap.setTitle("店家");
+					shopAuthMap.setTitleFlag(0);
+					shopAuthMap.setCreateTime(new Date());
+					shopAuthMap.setLastEditTime(new Date());
+					shopAuthMap.setEnableStatus(1);
+					try {
+						affectNum = shopAuthMapDao.insertShopAuthMap(shopAuthMap);
+						if (affectNum <= 0) {
+							LOG.error("addShop:授权创建失败");
+							throw new ShopOperationException("授权创建失败");
+						}
+					} catch (Exception e) {
+						LOG.error("insertShopAuthMap error: " + e.getMessage());
+						throw new ShopOperationException("授权创建失败");
+					}
 				}
 			}
 		} catch (Exception e) {
 			throw new ShopOperationException("Add shop error" + e.getMessage());
 		}
-
 		return new ShopExecution(ShopStateEnum.CHECK, shop);
 	}
 

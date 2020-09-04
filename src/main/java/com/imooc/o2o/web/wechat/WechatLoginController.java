@@ -63,6 +63,8 @@ public class WechatLoginController {
 				log.debug("weixin login token:" + token.toString());
 				// 通过token获取accessToken
 				String accessToken = token.getAccessToken();
+				// 将accessToken设置进session
+				request.getSession().setAttribute("accessToken", accessToken);
 				// 通过token获取openId
 				openId = token.getOpenId();
 				// 通过access_token和openId获取用户昵称等信息
